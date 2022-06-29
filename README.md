@@ -1,12 +1,14 @@
 <!--
  * @Author: 源源圆球 1340793687@outlook.com
  * @Date: 2022-06-03 18:01:14
- * @LastEditors: 源源圆球 1340793687@outlook.com
- * @LastEditTime: 2022-06-09 21:57:58
- * @FilePath: /docker/README.md
+ * @LastEditors: 源源球球✨ 1340793687@outlook.com
+ * @LastEditTime: 2022-06-24 03:52:28
+ * @FilePath: /zhenxunbot-docker/README.md
  * Copyright (c) 2022 by 源源圆球 1340793687@outlook.com, All Rights Reserved. 
 -->
-# [绪山真寻BOT](https://github.com/HibiKier/zhenxun_bot)的Docker镜像🐋
+<div align=center><img width="30%" src="./image/docker.png"/></div>
+
+# [绪山真寻BOT](https://github.com/HibiKier/zhenxun_bot)的Docker镜像
 
 ![](https://img.shields.io/github/workflow/status/SinKy-Yan/zhenxunbot-docker/Build%20Docker%20image?label=%E9%95%9C%E5%83%8F%E7%BC%96%E8%AF%91&style=for-the-badge)
 ![](https://img.shields.io/docker/image-size/jyishit/zhenxun_bot?label=%E9%95%9C%E5%83%8F%E5%A4%A7%E5%B0%8F&style=for-the-badge&logo=docker&logoColor=white&color=2496ED)
@@ -14,17 +16,22 @@
 ![](https://img.shields.io/badge/%E6%94%AF%E6%8C%81%E6%9E%B6%E6%9E%84-amd64%7Carm64-FF69B4?style=for-the-badge)
 ![Arduino](https://img.shields.io/badge/-Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)
 ![Arduino](https://img.shields.io/badge/-Python3.9-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/HibiKier/zhenxun_bot?label=%E7%9C%9F%E5%AF%BBBOT%E7%89%88%E6%9C%AC&style=for-the-badge)
 
 
-**镜像内已集成运行BOT需要的PostgreSQL🐘、绪山真寻BOT本体、以及真寻BOT-WebUI😋**
+**镜像内已集成运行BOT需要的数据库、BOT本体、以及真寻WebUI😋**
 
 <img align=right src='https://github.githubassets.com/images/mona-whisper.gif' />
 
 顺手点个Star⭐呗~
 
+## 🚀快速开始
 
-## 需要知道🧐
+直接运行下面这条命令,就会出现一个脚本引导你创建一个Bot容器
+```
+curl -sSL https://raw.githubusercontent.com/SinKy-Yan/zhenxunbot-docker/master/SetUP.sh | sudo bash
+```
+
+## 🧐需要知道
 
 你的机器需要有1G以上的空闲内存、2GB以上的空余储存空间
 
