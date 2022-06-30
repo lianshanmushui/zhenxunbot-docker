@@ -2,7 +2,7 @@
  * @Author: 源源圆球 1340793687@outlook.com
  * @Date: 2022-06-03 18:01:14
  * @LastEditors: 源源球球✨ 1340793687@outlook.com
- * @LastEditTime: 2022-06-24 03:52:28
+ * @LastEditTime: 2022-06-29 12:11:55
  * @FilePath: /zhenxunbot-docker/README.md
  * Copyright (c) 2022 by 源源圆球 1340793687@outlook.com, All Rights Reserved. 
 -->
@@ -90,6 +90,14 @@ jyishit/zhenxun_bot
 你可以点击图片加入QQ交流群、有关代码的问题可以提一个[Issue](https://github.com/SinKy-Yan/zhenxunbot-docker/issues/new)、别的东西可以发在[讨论](https://github.com/SinKy-Yan/zhenxunbot-docker/discussions)里
 
 [![加入QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-1034439737-ddff95?style=for-the-badge)](https://jq.qq.com/?_wv=1027&k=u8PgBkMZ)
+
+## 编译镜像（待补充）
+
+你需要搞定Docker的`Buildx`环境然后克隆该仓库然后执行下面的命令构建即可
+
+```
+docker buildx build --platform=arm64 --tag=zhenxun -o type=docker .
+```
 
 ## 容器内文件结构📂
 ```

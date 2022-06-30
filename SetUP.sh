@@ -3,10 +3,24 @@
  # @Author: 源源球球✨ 1340793687@outlook.com
  # @Date: 2022-06-22 12:57:13
  # @LastEditors: 源源球球✨ 1340793687@outlook.com
- # @LastEditTime: 2022-06-24 03:50:53
+ # @LastEditTime: 2022-06-30 10:15:03
  # @FilePath: /zhenxunbot-docker/SetUP.sh
  # Copyright (c) 2022 by 源源球球✨ 1340793687@outlook.com, All Rights Reserved. 
 ###
+
+#预设颜色
+red='\e[91m'
+green='\e[92m'
+yellow='\e[93m'
+magenta='\e[95m'
+cyan='\e[96m'
+none='\e[0m'
+_red() { echo -e ${red}$*${none}; }
+_green() { echo -e ${green}$*${none}; }
+_yellow() { echo -e ${yellow}$*${none}; }
+_magenta() { echo -e ${magenta}$*${none}; }
+_cyan() { echo -e ${cyan}$*${none}; }
+
 function docker_check()
 {
 	echo "🐋正在检查Docker环境"
@@ -243,18 +257,6 @@ function main()
         echo "检测到此脚本运行在WSL内,将无法自动重启Docker,但不影响其他功能"
     fi
 
-    # 判断架构
-    get_arch=`arch`
-    if [[ $get_arch =~ "x86_64" ]];then
-        echo -e "\033[32m✨真寻机器人Docker容器管理脚本\033[0m"
-    elif [[ $get_arch =~ "aarch64" ]];then
-        echo -e "\033[32m✨真寻机器人Docker容器管理脚本\033[0m"
-    else
-        echo -e "\033[31m\n检测到你的设备不是amd64或arm64架构,本镜像不支持你的设备,五秒后退出\033[0m"
-        sleep 5s
-        exit 1
-    fi
-
     source /etc/profile
     PS3='请选择你要执行的功能: '
     options=("创建Bot容器" "启动Bot容器" "停止Bot容器" "删除Bot容器" "重启Bot容器" "退出")
@@ -287,11 +289,28 @@ function main()
 }
 
 # 从这里开始执行
-# 判断是不是root权限
+# 判断root权限
 clear
 if [ "$UID" -ne "0" ] ;then
-    echo '请使用root权限运行此脚本'
-    exit 1
-else
+    echo -e "\n 哎呀……请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}\n" && exit 1
+fi
+# 检查Docker
+echo "🐋正在检查Docker环境"
+    sleep 1s
+    docker -v
+    if [ $? -eq  0 ]; then
+        echo "🐳${green}检查到Docker已安装${none}"
+    else
+        echo "❌${red}你没有安装Docker${none},请先安装后再执行此脚本~(^_^)"
+        exit 1
+    fi
+# 判断架构
+get_arch=`arch`
+if [[ $get_arch =~ "x86_64" ]];then
     main
+elif [[ $get_arch =~ "aarch64" ]];then
+    main
+else
+    echo -e "❌${red}检测到你的设备不是amd64或arm64架构${none},本镜像不支持你的设备,${yellow}请使用amd64或arm64架构的设备运行本脚本~(^_^)${none}"
+    exit 1
 fi
