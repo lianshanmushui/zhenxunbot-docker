@@ -2,9 +2,9 @@
 ###
  # @Author: 源源球球✨ 1340793687@outlook.com
  # @Date: 2022-06-22 12:57:13
- # @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- # @LastEditTime: 2022-07-06 00:13:16
- # @FilePath: /sinky/zhenxunbot-docker/SetUP.sh
+ # @LastEditors: SinKy-Yan 1340793687@outlook.com
+ # @LastEditTime: 2022-07-06 00:25:18
+ # @FilePath: /zhenxunbot-docker/SetUP.sh
  # Copyright (c) 2022 by 源源球球✨ 1340793687@outlook.com, All Rights Reserved. 
 ###
 
@@ -179,14 +179,14 @@ docker_remove()
 
 docker_restart()
 {
-    # echo "正在重启Bot容器..."
-    # docker restart $container_name
-    # if [ $? -eq 0 ]; then
-    #     echo "🎉Bot容器重启成功"
-    # else
-    #     echo "❌Bot容器重启失败"
-    # fi
-    # docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1 &
+    echo "正在重启Bot容器..."
+    docker restart $container_name
+    if [ $? -eq 0 ]; then
+        echo "🎉Bot容器重启成功"
+    else
+        echo "❌Bot容器重启失败"
+    fi
+    docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1 &
 }
 
 main()
