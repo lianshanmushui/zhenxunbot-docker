@@ -2,9 +2,9 @@
 ###
  # @Author: 源源球球✨ 1340793687@outlook.com
  # @Date: 2022-06-22 12:57:13
- # @LastEditors: 源源球球✨ 1340793687@outlook.com
- # @LastEditTime: 2022-07-05 11:42:49
- # @FilePath: /zhenxunbot-docker/SetUP.sh
+ # @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
+ # @LastEditTime: 2022-07-06 00:13:16
+ # @FilePath: /sinky/zhenxunbot-docker/SetUP.sh
  # Copyright (c) 2022 by 源源球球✨ 1340793687@outlook.com, All Rights Reserved. 
 ###
 
@@ -27,66 +27,29 @@ docker_is_running=`systemctl status sshd | grep Active | awk '{print $3}' | cut 
 read_config()
 {
     clear
-    echo "✨请按照提示输入信息,有默认值的可以直接按回车使用默认值"
-    sleep 3s
-    echo ""
+    whiptail --title "真寻Docker辅助脚本" --msgbox "✨请按照接下来的提示输入信息,按回车继续" 10 40
+    container_name=$(whiptail --title "真寻Docker辅助脚本" --inputbox "容器的名字" 10 40 zhenxun 3>&1 1>&2 2>&3)
+    bot_qq=$(whiptail --title "真寻Docker辅助脚本" --inputbox "Bot使用的QQ号:" 10 40 3>&1 1>&2 2>&3)
+    bot_qq_key=$(whiptail --title "真寻Docker辅助脚本" --inputbox "Bot使用的QQ密码:" 10 40 3>&1 1>&2 2>&3)
+    admin_qq=$(whiptail --title "真寻Docker辅助脚本" --inputbox "超级用户的QQ号:" 10 40 3>&1 1>&2 2>&3)
+    webui_user=$(whiptail --title "真寻Docker辅助脚本" --inputbox "WebUI的用户名:" 10 40 admin 3>&1 1>&2 2>&3)
+    webui_passwd=$(whiptail --title "真寻Docker辅助脚本" --inputbox "WebUI的密码:" 10 40 123456 3>&1 1>&2 2>&3)
+    webui_port=$(whiptail --title "真寻Docker辅助脚本" --inputbox "WebUI的端口:" 10 40 8080 3>&1 1>&2 2>&3)
+    plugins_dir=$(whiptail --title "真寻Docker辅助脚本" --inputbox "创建自定义插件目录的绝对位置:" 10 40 ~/my_plugins 3>&1 1>&2 2>&3)
 
-    read -p "请输入容器的名字(默认为zhenxun):" container_name
-    container_name=${container_name:-"zhenxun"}
-    echo -e "\033[32m容器名字已设为$container_name\033[0m"
-    echo ""
+    whiptail --title "真寻Docker辅助脚本" --yesno "容器名字:$container_name \
+        Bot的QQ号:$bot_qq \
+        Bot的QQ密码:$bot_qq_key \
+        超级用户的QQ号:$admin_qq \
+        WebUI的用户名:$webui_user \
+        WebUI的密码:$webui_passwd \
+        WebUI的端口:$webui_port \
+        插件目录:$plugins_dir \
+        是否继续?" 15 40 3>&1 1>&2 2>&3
 
-    read -p "请输入Bot使用的QQ号:" bot_qq
-    echo -e "\033[32mBot的QQ号已设为$bot_qq\033[0m"
-    echo ""
-
-    read -p "请输入Bot使用的QQ密码:" bot_qq_key
-    echo -e "\033[32mBot的QQ密码已设为$bot_qq_key\033[0m"
-    echo ""
-
-    read -p "请输入超级用户的QQ号:" admin_qq
-    echo -e "\033[32m超级用户的QQ号已设为$admin_qq\033[0m"
-    echo ""
-
-    read -p "请输入WebUI的用户名(默认为admin):" webui_user
-    webui_user=${webui_user:-"admin"}
-    echo -e "\033[32mWebUI的用户名已设为$webui_user\033[0m"
-    echo ""
-
-    read -p "请输入WebUI的密码(默认为123456):" webui_passwd
-    webui_passwd=${webui_passwd:-"123456"}
-    echo -e "\033[32mWebUI的密码已设为$webui_passwd\033[0m"
-    echo ""
-
-    read -p "请输入WebUI的端口(默认为8080):" webui_port
-    webui_port=${webui_port:-"8080"}
-    echo -e "\033[32mWebUI的端口已设为$webui_port\033[0m"
-    echo ""
-
-    read -p "请输入创建自定义插件目录的绝对位置(默认为当前目录):" plugins_dir
-    plugins_dir=${plugins_dir:-"$PWD"}
-    echo -e "\033[32m自定义插件目录位置已设为$plugins_dir/my_plugins\033[0m"
-    echo ""
-
-    clear
-    echo -e "\033[32m请确认以下配置是否正确\033[0m"
-    echo "容器名字:$container_name"
-    echo "Bot的QQ号:$bot_qq"
-    echo "Bot的QQ密码:$bot_qq_key"
-    echo "超级用户的QQ号:$admin_qq"
-    echo "WebUI的用户名:$webui_user"
-    echo "WebUI的密码:$webui_passwd"
-    echo "WebUI的端口:$webui_port"
-    echo "自定义插件目录位置:$plugins_dir/my_plugins"
-    sleep 2s
-
-    echo ""
-    read -p "是否配置正确?[y/n]" -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "\033[32m\n配置正确,开始创建容器\033[0m"
-        sleep 1s
+    if [ $? -eq 0 ]; then
+        pass
     else
-        echo "配置未确认,退出"
         exit 1
     fi
 }
@@ -94,59 +57,61 @@ read_config()
 docker_create_if_error()
 {
     if [[ $docker_run_log =~ "You have to remove (or rename) that container to be able to reuse that name" ]];then
-        echo -e "\033[31m\n❌错误:已经有一个叫$container_name的容器了\033[0m"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "❌错误:已经有一个叫$container_name的容器了" 10 40 && exit 1
     elif [[ $docker_run_log =~ "address already in use" ]];then
-        echo -e "\033[31m\n❌错误:端口$webui_port被占用\033[0m"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "❌错误:端口$webui_port被占用" 10 40 && exit 1
     else
         echo $docker_run_log
-        echo -e "\033[31m❌未知错误\033[0m"
     fi
 }
 
 docker_pull()
 {
-    clear
     # 设置加速器
-    if [ ! -f /etc/docker/daemon.json ];then
-        echo "🚀没有发现Docker配置,创建Docker配置文件目录"
-        mkdir -p /etc/docker
-        echo "🐋正在设置镜像下载加速器"
-        echo -e "{\n"registry-mirrors": ["https://hyqkgfgr.mirror.aliyuncs.com"]\n}" > /etc/docker/daemon.json
-        # 重启Docker
-        echo "重新加载Docker设置"
-        systemctl daemon-reload
-        echo "重启Docker"
-        systemctl restart docker
-        if [ $? -eq 0 ]; then
-            echo -e "\033[32m🐋Docker重启成功\033[0m"
+    if [ $if_use_systemctl -eq 1 ]; then
+        if [ ! -f /etc/docker/daemon.json ];then
+            echo "🚀没有发现Docker配置,创建Docker配置文件目录"
+            mkdir -p /etc/docker
+            echo "🐋正在设置镜像下载加速器"
+            echo -e "{\n"registry-mirrors": ["https://hyqkgfgr.mirror.aliyuncs.com"]\n}" > /etc/docker/daemon.json
+            # 重启Docker
+            echo "重新加载Docker设置"
+            systemctl daemon-reload
+            echo "重启Docker"
+            systemctl restart docker
+            if [ $? -eq 0 ]; then
+                echo -e "\033[32m🐋Docker重启成功\033[0m"
+            else
+                echo -e "\033[31m❌Docker重启失败...\033[0m"
+                exit 1
+            fi
         else
-            echo -e "\033[31m❌Docker重启失败...\033[0m"
-            exit 1
+            echo "🐋Docker配置文件已存在,不设置加速器"
         fi
-    else
-        echo "🐋Docker配置文件已存在,不设置加速器"
     fi
 
     # 下载镜像
-##################################https://www.cnblogs.com/YankaiJY/p/8831394.html
-
-
-    echo "🐋开始下载镜像"
-    docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log
+    docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1
     if [ $? -eq 0 ]; then
-        clear
-        echo -e "\033[32m🐋镜像下载成功\033[0m"
-        # docker_pull_log=$(cat /tmp/docker_pull.log)
-        # if [[ $docker_pull_log =~ "Image is up to date for jyishit/zhenxun_bot:latest" ]];then
-        #     echo -e "\033[32m🐋镜像已经是最新版\033[0m"
-        # elif [[ $docker_pull_log =~ "Pull complete" ]];then
-        #     echo -e "\033[32m🐋正在下载最新的镜像\033[0m"
-        # fi
+        {
+            while true
+            do
+            Pulling=$(grep -o 'Pulling fs layer' /tmp/docker_pull.log | wc -l)
+            Waiting=$(grep -o 'Waiting' /tmp/docker_pull.log | wc -l)
+            Verifying=$(grep -o 'Verifying Checksum' /tmp/docker_pull.log | wc -l)
+            Download_complete=$(grep -o 'Download complete' /tmp/docker_pull.log | wc -l)
+            Pull_complete=$(grep -o 'Pull complete' /tmp/docker_pull.log | wc -l)
+            persent=$((($Pulling+$Waiting+$Verifying+$Download_complete+$Pull_complete)*2))
+            Downloaded=$(cat /tmp/docker_pull.log)
+            if [[ $Downloaded =~ "Downloaded" ]];then
+                break
+            fi
+            sleep 1s
+            echo $persent
+            done
+        } | whiptail --gauge "正在下载镜像" 6 50 0
     else
-        # docker_pull_log=$(cat /tmp/docker_pull.log)
-        # echo docker_pull_log
-        echo -e "\033[31m❌镜像下载失败...\033[0m"
-        exit 1
+        whiptail --title "真寻Docker辅助脚本" --msgbox "❌镜像下载失败" 10 40 && exit 1
     fi
 }
 
@@ -221,111 +186,89 @@ docker_restart()
     # else
     #     echo "❌Bot容器重启失败"
     # fi
-    #!/bin/bash
-i=0
-str='#'
-ch=('|' '\' '-' '/')
-index=0
-while [ $i -le 25 ]
-do
-    printf "[%-25s][%d%%][%c]\r" $str $(($i*4)) ${ch[$index]}
-    str+='#'
-    let i++
-    let index=i%4
-    sleep 0.1
-done
-printf "\n"
-echo "安装完成"
-
+    # docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1 &
 }
 
 main()
 {
     clear
-    echo -e "\e[1;30;47m 真寻Docker辅助脚本 \e[0m"
-    source /etc/profile
-    PS3='请选择你要执行的功能[1~6]: '
-    options=("创建Bot容器" "启动Bot容器" "停止Bot容器" "删除Bot容器" "重启Bot容器" "退出")
-    select opt in "${options[@]}"
-    do
-        case $opt in
-            "创建Bot容器")
-                read_config
-                docker_pull
-                docker_create
-                ;;
-            "启动Bot容器")
-                docker_start
-                ;;
-            "停止Bot容器")
-                docker_stop
-                ;;
-            "删除Bot容器")
-                docker_remove
-                ;;
-            "重启Bot容器")
-                docker_restart
-                ;;
-            "退出")
-                break
-                ;;
-            *) echo 请选择1~6以内的;;
-        esac
-    done
+    OPTION=$(whiptail --title "真寻Docker辅助脚本" --menu "选择你要执行的功能" --notags 15 30 5 \
+            "1" "创建容器" \
+            "2" "启动容器" \
+            "3" "停止容器" \
+            "4" "删除容器" \
+            "5" "重启容器" 3>&1 1>&2 2>&3)
+    
+    if [ $? = 0 ]; then
+        if [ $OPTION = 1 ]; then
+            read_config
+            docker_pull
+            docker_create
+        elif [ $OPTION = 2 ]; then
+            docker_start
+        elif [ $OPTION = 3 ]; then
+            docker_stop
+        elif [ $OPTION = 4 ]; then
+            docker_remove
+        elif [ $OPTION = 5 ]; then
+            docker_restart
+        fi
+    fi
 }
 
 # 从这里开始执行
 # 判断root权限
 clear
 if [ "$UID" -ne "0" ] ;then
-    echo -e "\n 请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}\n" && exit 1
+    whiptail --title "真寻Docker辅助脚本" --msgbox "请使用Root权限运行此脚本,按回车退出" 10 40 && exit 1
+fi
+
+systemctl > /tmp/docker_shell_run.log 2>&1
+if [ $? -eq  0 ]; then
+    if_use_systemctl=1
+else
+    if_use_systemctl=0
+    whiptail --title "真寻Docker辅助脚本" --msgbox "⚠你的设备不是使用systemctl管理服务,将不会自动管理你的Docker服务,按回车继续" 10 40
 fi
 
 # 检查Docker
-echo "🐋正在检查Docker环境"
-# sleep 1s
-docker -v
+docker -v > /tmp/docker_shell_run.log 2>&1
 if [ $? -eq  0 ]; then
-    echo "🐳检查到Docker已安装"
+    pass
 else
-    _red "❌你没有安装Docker,请先安装后再执行此脚本~(^_^)"
-    exit 1
+    whiptail --title "真寻Docker辅助脚本" --msgbox "❌你没有安装Docker,请先安装后再执行此脚本~(^_^),按回车退出" 10 40 && exit 1
 fi
 
 # docker服务有没有运行
-if [ "$docker_is_running" == "running" ]
-    then  
-        echo "Docker服务正在运行"
+if [ $if_use_systemctl -eq 1 ]; then
+    if [ "$docker_is_running" == "running" ]
+    then
+        pass
     else
         systemctl start docker
         if [ $? -eq 0 ]; then
-            echo "🎉Docker服务启动成功"
+            pass
         else
-            _red "❌Docker服务启动失败"
-            exit 1
+            whiptail --title "真寻Docker辅助脚本" --msgbox "❌Docker启动失败,按回车退出" 10 40 && exit 1
         fi
+    fi
 fi
 
 # 判断系统
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     if [ -f /etc/redhat-release ]; then
-        echo "检测到您的系统为CentOS,这个系统还未经测试"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "⚠检测到您的系统为CentOS,这个系统还未经测试" 10 40
     elif [ -f /etc/arch-release ]; then
-        echo "检测到您的系统为ArchLinux,这个系统还未经测试"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "⚠检测到您的系统为ArchLinux,这个系统还未经测试" 10 40
     elif [ -f /etc/debian_version ]; then
-        echo -e ""
+        pass
     else
-        echo "这个脚本很可能在你的系统上无法正常运行,自己注意点"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "⚠这个脚本很可能在你的系统上无法正常运行" 10 40
     fi
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "检测到您的系统为macOS,这个系统还未经测试"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "⚠检测到您的系统为macOS,这个系统还未经测试" 10 40
     else
-        echo "这个脚本很可能在你的系统上无法正常运行,自己注意点"
-fi
-
-# 检测是不是WSL环境
-if [ -d /mnt/c ]; then
-    echo "检测到此脚本运行在WSL内,将无法自动启动Docker,但不影响其他功能"
+        whiptail --title "真寻Docker辅助脚本" --msgbox "⚠这个脚本很可能在你的系统上无法正常运行" 10 40
 fi
 
 # 判断架构
@@ -335,6 +278,5 @@ if [[ $get_arch =~ "x86_64" ]];then
 elif [[ $get_arch =~ "aarch64" ]];then
     main
 else
-    echo -e "❌${red}检测到你的设备不是amd64或arm64架构${none},本镜像不支持你的设备,${yellow}请使用amd64或arm64架构的设备运行本脚本~(^_^)${none}"
-    exit 1
+    whiptail --title "真寻Docker辅助脚本" --msgbox "❌检测到你的设备不是amd64或arm64架构,请使用amd64或arm64架构的设备运行此脚本" 10 40 && exit 1
 fi
