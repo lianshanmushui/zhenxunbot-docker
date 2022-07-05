@@ -3,7 +3,7 @@
  # @Author: 源源球球✨ 1340793687@outlook.com
  # @Date: 2022-06-22 12:57:13
  # @LastEditors: SinKy-Yan 1340793687@outlook.com
- # @LastEditTime: 2022-07-06 00:25:18
+ # @LastEditTime: 2022-07-06 00:29:55
  # @FilePath: /zhenxunbot-docker/SetUP.sh
  # Copyright (c) 2022 by 源源球球✨ 1340793687@outlook.com, All Rights Reserved. 
 ###
@@ -47,11 +47,11 @@ read_config()
         插件目录:$plugins_dir \
         是否继续?" 15 40 3>&1 1>&2 2>&3
 
-    if [ $? -eq 0 ]; then
-        pass
-    else
-        exit 1
-    fi
+    # if [ $? -eq 0 ]; then
+    #     pass
+    # else
+    #     exit 1
+    # fi
 }
 
 docker_create_if_error()
@@ -91,7 +91,7 @@ docker_pull()
     fi
 
     # 下载镜像
-    docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1
+    docker pull jyishit/zhenxun_bot > /tmp/docker_pull.log 2>&1 &
     if [ $? -eq 0 ]; then
         {
             while true
