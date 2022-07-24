@@ -73,7 +73,7 @@ docker_pull()
             echo "🚀没有发现Docker配置,创建Docker配置文件目录"
             mkdir -p /etc/docker
             echo "🐋正在设置镜像下载加速器"
-            echo -e "{\n"registry-mirrors": ["https://hyqkgfgr.mirror.aliyuncs.com"]\n}" > /etc/docker/daemon.json
+            echo -e "{\n\"registry-mirrors\": [\"https://hyqkgfgr.mirror.aliyuncs.com\"]\n}" > /etc/docker/daemon.json
             # 重启Docker
             echo "重新加载Docker设置"
             systemctl daemon-reload
