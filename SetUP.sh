@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/local/bin/bash
 ###
  # @Author: 源源球球✨ 1340793687@outlook.com
  # @Date: 2022-06-22 12:57:13
